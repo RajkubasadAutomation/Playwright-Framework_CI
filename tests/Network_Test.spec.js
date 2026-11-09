@@ -37,7 +37,7 @@ test('@api Network Intercepting: check no Orders to disply in orders section', a
     console.log(await page.locator('.mt-4').textContent());
 })
 
-test('Failing this test for report purpose',async function({page}){
+test.skip('Failing this test for report purpose',async function({page}){
     await page.goto('https://rahulshettyacademy.com/client');
     await expect(this.successMsg).toHaveText(" Thankyou for the order. ",{timeout:120000});
     
