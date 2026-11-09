@@ -1,0 +1,32 @@
+{
+  "name": "playwright-framework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "Regression": "npx playwright test --project=chromium --project=edge",
+    "test:e2e": "npx playwright test tests/E2E_Flow.spec.js",
+    "test:networkMock": "npx playwright test tests/Network_Test.spec.js",
+    "test:api": "npx playwright test --grep \"@API\"",
+    "test:web": "npx playwright test --grep \"@web\"",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:edge": "npx playwright test --project=edge",
+    "test:firefox": "npx playwright test --project=firefox",
+    "test:mobile": "npx playwright test --project=mobile --headed",
+    "test:Regression:allure": "npx playwright test --reporter=line,allure-playwright",
+    "allure:generate": "allure generate ./allure-results --clean",
+    "allure:open": "allure open ./allure-report",
+    "allure:serve": "allure serve ./allure-results",
+    "allure:report": "npm run allure:generate && npm run allure:open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^26.6.6",
+    "allure-playwright": "^3.14.0",
+    "install": "^0.13.0"
+  }
+}
