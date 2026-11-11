@@ -17,16 +17,22 @@
     "allure:generate": "allure generate ./allure-results --clean",
     "allure:open": "allure open ./allure-report",
     "allure:serve": "allure serve ./allure-results",
-    "allure:report": "npm run allure:generate && npm run allure:open"
+    "allure:report": "npm run allure:generate && npm run allure:open",
+    "test:cucumber": "npx cucumber-js --exit",
+    "test:validation": "npx cucumber-js --tags \"@Validation\" --exit",
+    "test:regression": "npx cucumber-js --tags \"@Regression\" --exit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.65.0",
     "@types/node": "^26.6.6",
     "allure-playwright": "^3.14.0",
-    "install": "^0.13.0"
+    "install": "^0.13.0",
+    "multiple-cucumber-html-reporter": "^4.6.0"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^13.3.0"
   }
 }

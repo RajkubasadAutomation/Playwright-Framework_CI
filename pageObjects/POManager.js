@@ -1,8 +1,8 @@
-import LoginPage from "./LoginPage";
-import DashboardPage from "./DashboardPage";
-import OrdersPage from "./OrdersPage";
-import CartPage from "./CartPage";
-import CheckoutPage from "./CheckoutPage";
+import LoginPage from "./LoginPage.js";
+import DashboardPage from "./DashboardPage.js";
+import OrdersPage from "./OrdersPage.js";
+import CartPage from "./CartPage.js";
+import CheckoutPage from "./CheckoutPage.js";
 
 class POManager {
 
