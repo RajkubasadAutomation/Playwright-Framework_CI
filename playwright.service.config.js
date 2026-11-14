@@ -4,7 +4,7 @@ const { DefaultAzureCredential } = require('@azure/identity');
 const config = require('./playwright.config');
 
 /* Learn more about service configuration at https://aka.ms/pww/docs/config */
-export default defineConfig(
+module.exports = defineConfig(
   config,
   createAzurePlaywrightConfig(config, {
     exposeNetwork: '<loopback>',
@@ -14,16 +14,13 @@ export default defineConfig(
   }),
   {
     /*
-    Enable Playwright Workspaces Reporter:
-    Uncomment the reporter section below to upload test results and reports to Playwright Workspaces.
-
-    Note: The HTML reporter must be included before Playwright Workspaces Reporter.
-    This configuration will replace any existing reporter settings from your base config.
-    If you're already using other reporters, add them to this array.
+    Playwright Workspaces Reporter:
+    Uploads test results and reports to Microsoft Playwright Testing in Azure Portal.
+    HTML reporter must come BEFORE the Azure reporter.
     */
     reporter: [
       ["html", { open: "never" }],
-       ["@azure/playwright/reporter"],
+      ["@azure/playwright/reporter"],
     ],
   }
 );

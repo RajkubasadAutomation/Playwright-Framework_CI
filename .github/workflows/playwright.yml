@@ -1,4 +1,4 @@
-name: Playwright & Cucumber Tests
+name: Playwright & Cucumber Tests (Azure CI)
 
 on:
   push:
@@ -7,7 +7,15 @@ on:
     branches: [main, master]
   workflow_dispatch:   # Allows manual trigger from GitHub UI
 
+# Required for OIDC (passwordless Azure login)
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
+  # ─────────────────────────────────────────────
+  # JOB 1: Playwright Tests (Chromium + Edge)
+  # ─────────────────────────────────────────────
   playwright-tests:
     name: Playwright Tests (Chromium + Edge)
     timeout-minutes: 60
@@ -29,13 +37,32 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium msedge
 
+      # Login to Azure using OIDC (no password / secret needed)
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Run Playwright tests (Chromium)
         run: npx playwright test --project=chromium
         continue-on-error: true
+        env:
+          PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
+          # Passes Azure credentials through to DefaultAzureCredential
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run Playwright tests (Edge)
         run: npx playwright test --project=edge
         continue-on-error: true
+        env:
+          PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Upload Playwright HTML Report
         uses: actions/upload-artifact@v4
@@ -53,6 +80,9 @@ jobs:
           path: test-results/
           retention-days: 7
 
+  # ─────────────────────────────────────────────
+  # JOB 2: Cucumber BDD Tests
+  # ─────────────────────────────────────────────
   cucumber-tests:
     name: Cucumber BDD Tests
     timeout-minutes: 60
@@ -74,16 +104,39 @@ jobs:
       - name: Install Playwright browsers (for Cucumber hooks)
         run: npx playwright install --with-deps chromium
 
+      # Login to Azure using OIDC
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Run all Cucumber tests
         run: npm run test:cucumber
+        env:
+          PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run Cucumber Regression tests
         run: npm run test:regression
         continue-on-error: true
+        env:
+          PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Run Cucumber Validation tests
         run: npm run test:validation
         continue-on-error: true
+        env:
+          PLAYWRIGHT_SERVICE_URL: ${{ secrets.PLAYWRIGHT_SERVICE_URL }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Upload Cucumber HTML Report
         uses: actions/upload-artifact@v4
