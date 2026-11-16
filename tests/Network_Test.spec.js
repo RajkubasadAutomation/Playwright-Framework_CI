@@ -25,14 +25,14 @@ test('@api Network Intercepting: check no Orders to disply in orders section', a
             let body= JSON.stringify(fakePayLoad);
             route.fulfill(
                 {
-                    //response,
-                   // body,
+                    response,
+                    body,
                 }
             )
         }
     );
 
-    await page.locator("button[routerlink*='myorders']").click();
+    await page.locator("button[routerlink*='myorders']")//.click();
     await page.waitForResponse('https://rahulshettyacademy.com/api/ecom/order/get-orders-for-customer/*')
     console.log(await page.locator('.mt-4').textContent());
 })
