@@ -25,8 +25,8 @@ test('@api Network Intercepting: check no Orders to disply in orders section', a
             let body= JSON.stringify(fakePayLoad);
             route.fulfill(
                 {
-                    response,
-                    body,
+                    //response,
+                   // body,
                 }
             )
         }
